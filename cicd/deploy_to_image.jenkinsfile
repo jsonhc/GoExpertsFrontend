@@ -15,7 +15,7 @@ pipeline {
         stage('build') {
             steps {
                 script {
-                    sh "docker build -t nginx:${env_BUILD_NUMBER} ."
+                    sh "docker build -t nginx:${env.BUILD_NUMBER} ."
                 }
             } 
         }
@@ -24,7 +24,7 @@ pipeline {
                 script {
                     sh "docker stop nginx"
                     sh "docker rm nginx"
-                    sh "docker run -d -p 80:80 --name nginx nginx:${env_BUILD_NUMBER}"
+                    sh "docker run -d -p 80:80 --name nginx nginx:${env.BUILD_NUMBER}"
                 }
             }
         }
