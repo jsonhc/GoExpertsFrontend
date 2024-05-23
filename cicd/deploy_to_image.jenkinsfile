@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    stages {
+        stage('git checkout') {
+            steps {
+                script {
+                    git(
+                        branch: 'main',
+                        url: 'git@github.com:jsonhc/GoExpertsFrontend.git',
+                        credentialsId: 'f216f35b-803c-4ac1-b820-3e7a15d93252'
+                   )
+                }
+            }   
+        }
+        stage('build') {
+            steps {
+                script {
+                    sh "docker build -t nginx:${env_BUILD_NUMBER} ."
+                }
+            } 
+        }
+        stage('deploy to nginx') {
+            steps {
+                script {
+                    sh "docker stop nginx"
+                    sh "docker rm nginx"
+                    sh "docker run -d -p 80:80 --name nginx nginx:${env_BUILD_NUMBER}"
+                }
+            }
+        }
+    }
+}
