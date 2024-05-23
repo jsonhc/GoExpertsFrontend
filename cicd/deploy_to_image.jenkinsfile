@@ -22,8 +22,8 @@ pipeline {
         stage('deploy to nginx') {
             steps {
                 script {
-                    sh "docker stop nginx"
-                    sh "docker rm nginx"
+                    sh "docker stop nginx || true"
+                    sh "docker rm nginx || true"
                     sh "docker run -d -p 80:80 --name nginx nginx:${env.BUILD_NUMBER}"
                 }
             }
