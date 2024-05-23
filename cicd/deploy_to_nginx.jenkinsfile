@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    stages {
+        stage('git checkout') {
+            steps {
+                script {
+                    git(
+                        branch: 'main',
+                        url: 'git@github.com:jsonhc/GoExpertsFrontend.git',
+                        credentialsId: 'f216f35b-803c-4ac1-b820-3e7a15d93252'
+                   )
+                }
+            }   
+        }
+        stage('build') {
+            steps {
+                script {
+                    sh "npm install"
+                    sh "npm run build"
+                }
+            } 
+        }
+        stage('deploy to nginx') {
+            steps {
+                script {
+                    sh "rm -rf /usr/share/nginx/html/*"
+                    sh "cp -r build/* /usr/share/nginx/html/"
+                }
+            }
+        }
+    }
+}
